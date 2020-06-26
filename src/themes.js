@@ -51,30 +51,4 @@ export default {
 			speaking: 'images/grasshopper/grasshopper-speaking.png',
 		}
 	},
-	porcupine: {
-		colors: {
-			sttText: '#fff',
-			ttsText: '#95d387',
-			sttColor: '#c09753',
-			ttsColor: '#fff',
-		},
-		images: {
-			default: 'images/porcupine/porcupine-default.png',
-			hotword: 'images/porcupine/porcupine-hotword.png',
-			speaking: 'images/porcupine/porcupine-speaking.png',
-		}
-	},
-	terminator: {
-		colors: {
-			sttText: '#fff',
-			ttsText: '#95d387',
-			sttColor: '#4570bb',
-			ttsColor: '#971f1f',
-		},
-		images: {
-			default: 'images/terminator/terminator-default.png',
-			hotword: 'images/terminator/terminator-hotword.png',
-			speaking: 'images/terminator/terminator-speaking.png',
-		}
-	}
 };
