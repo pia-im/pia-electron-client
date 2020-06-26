@@ -45,6 +45,6 @@ function createWindow() {
 	return mainWindow;
 }
 
-module.exports = function(jaxcore) {
+module.exports = function() {
 	return createWindow();
 }

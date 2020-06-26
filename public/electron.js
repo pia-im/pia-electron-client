@@ -1,12 +1,12 @@
 const electron = require('electron');
 const app = electron.app;
-const bootstrap = require('./bootstrap');
+const windowManager = require('./window-manager.js');
+const BumblebeeNode = require('./BumblebeeNode.js');
 
 app.on('ready', function () {
-	bootstrap.startBumblebeeElectron(function(bumblebeeElectron) {
-		console.log('Bumblebee started:', bumblebeeElectron.state);
-	});
-	
+  const bumblebee = new BumblebeeNode(this);
+  const mainWindow = windowManager();
+  console.log('Started');
 });
 
 app.on('window-all-closed', () => {

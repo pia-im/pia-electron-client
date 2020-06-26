@@ -1,11 +1,9 @@
 import EventEmitter from 'events';
 import {connectSayQueue} from './SayQueue';
-// import {connectMicrophone} from './Microphone';
 import Hotword from 'bumblebee-hotword';
 import {connectPlaySound} from './playSound';
 import drawVADCanvas, {clearVADCanvas} from './drawVADCanvas';
 
-import choose from './choose';
 import SpectrumAnalyser from "./audio-spectrum-analyser";
 
 const ipcRenderer = window.ipcRenderer;
@@ -20,10 +18,6 @@ class BumblebeeClient extends EventEmitter {
 		this.apps = {};
 		this.assistants = {};
 		
-		this.choose = choose;
-		
-		// this.microphone = connectMicrophone(this, app);
-		
 		this.hotword = new Hotword();
 		this.hotword.bufferSize = 512;
 		this.hotword.setSensitivity(0.5);
@@ -33,8 +27,6 @@ class BumblebeeClient extends EventEmitter {
 		this.hotword.addHotword('bumblebee');
 		this.hotword.addHotword('grasshopper');
 		this.hotword.addHotword('hey_edison');
-		this.hotword.addHotword('porcupine');
-		this.hotword.addHotword('terminator');
 		
 		this.hotword.on('data', (intData, floatData, sampleRate, hotword) => {
 			// console.log('data', intData.length, floatData.length, sampleRate, hotword);
@@ -57,15 +49,7 @@ class BumblebeeClient extends EventEmitter {
 			this.analyser.setBackgroundColor('#222');
 			this.analyser.start();
 		});
-		
-		// this.hotword.on('hotword', (hotword) => {
-		// 	// this.app.addSpeechOutput({
-		// 	// 	type: 'text',
-		// 	// 	text: 'hotwordDetected '+hotword
-		// 	// });
-		// 	ipcRenderer.send('hotword-detected', intData, floatData, sampleRate, hotword);
-		// });
-		
+
 		this.sayQueue = connectSayQueue(this, app);
 		this.playSound = connectPlaySound(this, app);
 		
@@ -82,9 +66,6 @@ class BumblebeeClient extends EventEmitter {
 			this.setActiveAssistant(hotword, assistantName, activeApp);
 		}
 		window.hotwordDetected = (hotword) => {
-			// this.app.addSpeechOutput('hotwordDetected '+hotword);
-			// this.setHotwordDetected(hotword);
-			
 			debugger;
 		};
 		
@@ -122,8 +103,6 @@ class BumblebeeClient extends EventEmitter {
 			this.app.setElectronConfig(config);
 		}
 		window.deepspeechResults = (text, stats) => {
-			// debugger;
-			
 			if (this.app.state.activeAssistant) {
 				console.log('activeAssistant results', text, stats);
 			}
@@ -135,15 +114,6 @@ class BumblebeeClient extends EventEmitter {
 					type: 'stt'
 				});
 			}
-			// if (stats.hotword) {
-			// 	debugger;
-			// 	// this.emit('hotwordRecognize', text, stats);
-			// }
-			// else {
-			// 	this.emit('recognize', text, stats);
-			// }
-			
-			// this.setHotwordDetected(null);
 		};
 
 		window.displayConsole = (component) => {
@@ -180,24 +150,7 @@ class BumblebeeClient extends EventEmitter {
 			debugger;
 		}
 	}
-	
-	// displayApp(hotword, appName, logo) {
-	// 	this.app.displayApp(hotword, appName, logo);
-	// }
-	
-	// async launchAssistant(hotword) {
-	// 	debugger;
-	// 	// debugger;
-	// 	// if (!this.assistants[hotword]) {
-	// 	// 	this.assistants[hotword] = new BumblebeeAssistant(hotword);
-	// 	// 	return this.assistants[hotword].main(this);
-	// 	// }
-	// 	// else {
-	// 	//
-	// 	// }
-	// 	// return this.launch(hotword, null, true);
-	// }
-	
+
 	async launchApp(fn) {
 	
 	}
@@ -286,16 +239,6 @@ class BumblebeeClient extends EventEmitter {
 	simulateHotword(text) {
 		// debugger;
 		ipcRenderer.send('simulate-hotword', text);
-		// let hotword = this.app.state.activeAssistant;
-		// if (hotword) ipcRenderer.send('simulate-hotword', text, hotword);
-		// else {
-		// 	console.log('no assistant');
-		// }
-		
-		// this.app.setMuted(true);
-		// setTimeout(() => {
-		// 	this.app.setMuted(false);
-		// },1000);
 	}
 	
 	simulateTTS(text) {
@@ -307,24 +250,9 @@ class BumblebeeClient extends EventEmitter {
 			this.console('muted');
 			return;
 		}
-		// debugger;
-		// this.app.setConsoleInputText(text);
 		ipcRenderer.send('simulate-stt', text);
 	}
-	
-	// changeHotword(value) {
-	// 	let hotword = value;
-	// 	let hotwordEnabled = true;
-	// 	if (value === 'OFF') {
-	// 		hotwordEnabled = false;
-	// 	}
-	// 	this.app.setState({
-	// 		hotword,
-	// 		hotwordEnabled
-	// 	});
-	// 	ipcRenderer.send('hotword-select', hotword);
-	// }
-	
+
 	toggleRecording() {
 		if (this.app.state.recording) this.stopRecording()
 		else this.startRecording();
@@ -460,50 +388,11 @@ class BumblebeeClient extends EventEmitter {
 	setActiveAssistantApp(activeApp) {
 		this.app.updateConfig();
 		this.app.updateBanner();
-		
-		// this.app.setState({
-		// 	activeAssistantApp: activeApp
-		// }, () => {
-		// 	this.app.updateBanner();
-		// });
 	}
 	setActiveAssistant(hotword, assistantName, activeApp) {
 		this.app.updateConfig();
 		this.app.updateBanner();
-		// if (this.app.state.activeAssistant !== hotword) {
-		// 	this.app.setState({
-		// 		activeAssistant: hotword,
-		// 		activeAssistantName: assistantName,
-		// 		activeAssistantApp: activeApp
-		// 	}, () => {
-		// 		this.app.updateBanner();
-		// 	});
-		// }
 	}
-	
-	// setHotwordDetected(hotword) {
-	// 	if (hotword) {
-	// 		this.emit('hotword', hotword);
-	// 	}
-	// 	if (this.app.state.hotwordDetected !== hotword) {
-	// 		if (hotword) {
-	// 			// this.app.addSpeechOutput({
-	// 			// 	hotword,
-	// 			// 	type: 'hotword'
-	// 			// });
-	// 		}
-	// 		this.app.setState({
-	// 			hotwordDetected: hotword,
-	// 			logo: hotword ? this.app.logos.hotword : this.app.logos.default
-	// 		});
-	// 		if (hotword) {
-	// 			if (this.analyser) this.analyser.setLineColor('#d6bc22');
-	// 		}
-	// 		else {
-	// 			if (this.analyser) this.analyser.setLineColor('#fff');
-	// 		}
-	// 	}
-	// }
 	
 	async onRecordingStarted() {
 		return new Promise((resolve, reject) => {

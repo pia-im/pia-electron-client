@@ -18,23 +18,16 @@
 
 import React, {Component} from 'react';
 
-import AppsIcon from '@material-ui/icons/Apps';
-
 import MicIcon from '@material-ui/icons/Mic';
 import MicOffIcon from '@material-ui/icons/MicOff';
 import SettingsIcon from '@material-ui/icons/Settings';
-import InstallDialog from './install/InstallDialog';
 
 import BumblebeeClient from './bumblebee-client/BumblebeeClient';
 import ConsoleOutput from './console/ConsoleOutput';
 import _console from './console/console';
 
-// import DeepSpeechInstalled from './apps/DeepSpeechInstalled';
-
 import themes from './themes';
 
-
-// import Main from './Main';
 
 const ipcRenderer = window.ipcRenderer;
 
@@ -84,50 +77,14 @@ class App extends Component {
 		this.consoleInputRef = React.createRef();
 		this.contentPanelRef = React.createRef();
 		
-		
-		
-		// this.colors = {
-		// 	// micAssistantMainColor: '#d6bc22',
-		// 	// micAssistantAppColor: '#fff',
-		// 	micMainMenuColor: '#777',
-		// 	ttsColor: '#fff' //'#57f'
-		// 	// ttsColor: '#7c9fff' //'#57f'
-		// }
-		
-		// this.state.logo = this.logos.mainMenu;
-		
 		window.app = this;
 	}
 	
-	// displayApp(hotword, appName, logo) {
-	// 	debugger;
-	// 	this.setState({
-	// 		appDisplay: {
-	// 			hotword,
-	// 			appName,
-	// 			logo
-	// 		}
-	// 	});
-	// }
-	
-	// setMicrophoneColor(color) {
-	// 	// this.setState({microphoneColor: color});
-	// 	if (this.bumblebee.analyser) {
-	// 		this.bumblebee.analyser.setLineColor(color);
-	// 	}
-	// }
-	
 	updateBanner() {
-		// logo: hotword ? this.app.logos.hotword : this.app.logos.default
-		
-		// const isMain = this.state.config.activeAssistantsApp==='main'
 		const isSayPlaying = this.state.sayPlaying;
 		const isDisabled = !this.state.recording;
-		let logo, sttColor, ttsColor, appTextColor;
-		
-		// micSTTColor: '#777',
-		// 	micTTSColor: '#fff',
-		
+		let logo, appTextColor;
+
 		let theme;
 		
 		if (this.state.config.activeAssistant) {
@@ -136,7 +93,6 @@ class App extends Component {
 			
 			if (isDisabled) {
 				logo = this.theme.images.default;
-				// micColor = this.theme.colors.textTTSColor;
 				appTextColor = '#777';
 			}
 			else {
@@ -147,12 +103,8 @@ class App extends Component {
 				else {
 					logo = this.theme.images.hotword;
 					appTextColor = this.theme.colors.textSTTColor;
-					// micColor = this.theme.colors.micSTTColor;
 				}
 			}
-			
-			// let color = isMain? this.colors.micAssistantMainColor : this.colors.micAssistantAppColor
-			// this.setMicrophoneColor(micColor);
 		}
 		else {
 			theme = 'mainmenu';
@@ -165,58 +117,18 @@ class App extends Component {
 			else {
 				appTextColor = this.theme.colors.textSTTColor;
 			}
-			//  micColor = this.theme.colors.micSTTColor;
-			// this.setTheme(this.themes.mainmenu);
-			// this.setState({
-			// 	logo: null //this.logos.mainMenu
-			// });
-			// this.setMicrophoneColor(this.colors.micMainMenuColor);
 		}
-		
-		// sttColor = this.theme.colors.textSTTColor;
-		// ttsColor = this.theme.colors.textTTSColor;
 		
 		this.setState({
 			logo,
 			theme,
-			// sttColor,
-			// ttsColor,
-			// appTextColor,
 		}, () => {
 			if (this.bumblebee.analyser) {
 				this.bumblebee.analyser.setLineColor(this.theme.colors.sttColor);
 			}
 		});
 	}
-	
-	// setTheme(theme) {
-	// 	this.theme = theme;
-	// }
-	
-	// async main() {
-	// 	setTimeout(function() {
-	// 		// debugger;
-	// 		ipcRenderer.send('bumblebee-start-server', 'bumblebee', 'help');
-	// 	},100);
-	//
-	// 	// this.bumblebee.console('main()');
-	// 	//
-	// 	// try {
-	// 	// 	await Main(this.bumblebee);
-	// 	// }
-	// 	// catch(e) {
-	// 	// 	this.addSpeechOutput({
-	// 	// 		text: e.toString()
-	// 	// 	});
-	// 	// 	debugger;
-	// 	// 	await this.bumblebee.say('the main application encountered an error');
-	// 	// }
-	// 	//
-	// 	// await this.bumblebee.say('restarting main');
-	// 	//
-	// 	// return this.main();
-	// }
-	
+
 	resize() {
 		let contentPanelRef = this.contentPanelRef.current;
 		if (contentPanelRef) {
@@ -231,41 +143,11 @@ class App extends Component {
 		
 		ipcRenderer.on('electron-ready', (event, config) => {
 			this.setElectronConfig(config);
-			// console.log('BBClient', BBClient);
 			console.log('BumblebeeClient', BumblebeeClient);
-			// debugger;
-			//
-			// debugger;
-			// return;
 			
 			this.bumblebee = new BumblebeeClient(this);
 
-			if (this.state.config.deepspeechInstalled) {
-				// debugger;
-				this.startServer();
-				// this.bumblebee.startRecording();
-				// this.launch('MainMenu');
-				// this.main();
-				// this.bumblebee.simulateSTT('main menu');
-			}
-			else {
-					debugger;
-				// this.bumblebee.say('Welcome to Bumblebee')
-				// .then(() => {
-				// 	return this.bumblebee.say('It looks like you don\'t have DeepSpeech installed');
-				// })
-				// .then(() => {
-				// 	return this.bumblebee.say('Let\'s install it now');
-				// })
-				// .then(() => {
-				// 	this.showInstall(true);
-				// });
-					this.showInstall(true);
-
-
-				// return;
-				// this.bumblebee.launch('DeepSpeechInstall');
-			}
+      this.startServer();
 			console.log('electron ready');
 		});
 		
@@ -285,26 +167,6 @@ class App extends Component {
 		this.setElectronConfig(config);
 	}
 	
-	deepspeechInstalled() {
-		// debugger;
-		this.setState({
-			showInstallDialog: false,
-		});
-		this.updateConfig();
-		// this.startIntro();
-		// debugger;
-		this.startServer().then(() => {
-			// debugger;
-			ipcRenderer.send('start-bumblebee-intro');
-		});
-		
-		//
-		// let r = DeepSpeechInstalled(this.bumblebee);
-		// this.main();
-		
-		// ipcRenderer.send('bumblebee-start-server', 'bumblebee', 'help');
-	}
-	
 	async startServer() {
 		const response = await ipcRenderer.invoke('bumblebee-start-server');
 		if (response === true) {
@@ -313,31 +175,8 @@ class App extends Component {
 		}
 		else {
 			throw response;
-			// debugger;
-			// return false;
 		}
-		// ipcRenderer.invoke('bumblebee-start-server').then((response) => {
-		// 	if (response === true) {
-		// 		console.log(response);
-		// 		debugger;
-		// 		this.bumblebee.startRecording();
-		// 	}
-		// 	else {
-		// 		debugger;
-		// 	}
-		// });
 	}
-	
-	//
-	// startIntro() {
-	// 	// customize(this)
-	// 	// .then(r => {
-	// 	// 	debugger;
-	// 	// })
-	// 	// .catch(e => {
-	// 	// 	debugger;
-	// 	// });
-	// }
 	
 	showInstall(show) {
 		this.setState({
@@ -352,13 +191,8 @@ class App extends Component {
 		
 		let logoImage;
 		if (this.state.logo) logoImage = (<img src={this.state.logo}/>);
-		// else logoImage = (<img src={this.images.mainmenu}/>);
-			//logoImage = (<AppsIcon />);
 		
 		return (<div className="App">
-			
-			{this.state.showInstallDialog ? (<InstallDialog onInstalled={() => this.deepspeechInstalled()}
-															onCancel={() => this.showInstall(false)}/>) : null}
 			
 			<div id="header">
 				
@@ -416,7 +250,7 @@ class App extends Component {
 		if (this.state.sayPlaying) {
 			clss = 'tts';
 		}
-		
+
 		return (<div id="app-bar" style={{color: this.state.appTextColor}}>
 			{name} {this.state.appTextColor}
 		</div>);
@@ -429,16 +263,12 @@ class App extends Component {
 	openDevTools() {
 		console.log('toggleControls')
 		ipcRenderer.send('dev-tools');
-		// this.setState({
-		// 	controlsVisible: !this.state.controlsVisible
-		// });
 	}
 	
 	renderContent() {
 		return (<div className="content" ref={this.contentRef}>
 
 			<div className="content-panel" ref={this.contentPanelRef}>
-				{/*{this.renderControls()}*/}
 				{this.renderRecognitionOutput()}
 			</div>
 		</div>);
@@ -447,13 +277,6 @@ class App extends Component {
 	renderConsoleInput() {
 		
 		return (<div id="console-input">
-			
-			<select onChange={e => this.changeInputMode(e.target.options[e.target.selectedIndex].value)}
-					value={this.state.inputMode}>
-				<option value="stt">STT</option>
-				<option value="tts">TTS</option>
-				<option value="hot">HOT</option>
-			</select>
 			
 			<input type="text" ref={this.consoleInputRef} placeholder={inputModePlaceholders[this.state.inputMode]}
 				   onKeyPress={this.keypressConsoleInput}/>
@@ -468,47 +291,6 @@ class App extends Component {
 		</div>);
 	}
 	
-	// // todo; settings
-	// renderControls() {
-	// 	const controlsClass = this.state.controlsVisible ? 'block' : 'none';
-	//
-	// 	return (<div className={'controls ' + controlsClass}>
-	//
-	// 		Hotword: <select onChange={e => this.bumblebee.changeHotword(e.target.options[e.target.selectedIndex].value)}
-	// 						 value={this.state.hotword}>
-	// 		<option value="OFF">- OFF -</option>
-	// 		<option value="bumblebee">bumblebee</option>
-	// 		<option value="grasshopper">grasshopper</option>
-	// 		<option value="hey_edison">hey_edison</option>
-	// 		<option value="porcupine">porcupine</option>
-	// 		<option value="terminator">terminator</option>
-	// 		<option value="ANY">- ANY -</option>
-	// 	</select>
-	//
-	// 		<br/><br/>
-	//
-	// 		<button disabled={!this.state.recording} onClick={e => this.toggleMute()}>
-	// 			{this.state.muted ? 'Unmute' : 'Mute'}
-	// 		</button>
-	//
-	//
-	// 		<button onClick={e => {
-	// 			ipcRenderer.send('dev-tools');
-	// 		}}>
-	// 			Dev Console
-	// 		</button>
-	//
-	// 		<br/>
-	//
-	// 	</div>);
-	// }
-	
-	changeInputMode(value) {
-		this.setState({
-			inputMode: value
-		});
-	}
-	
 	keypressConsoleInput = (e) => {
 		if (e.key === 'Enter') {
 			this.executeConsoleInput();
@@ -520,15 +302,7 @@ class App extends Component {
 	}
 	executeConsoleInput() {
 		let text = this.consoleInputRef.current.value;
-		if (this.state.inputMode === 'stt') {
-			this.bumblebee.simulateSTT(text);
-		}
-		if (this.state.inputMode === 'tts') {
-			this.bumblebee.simulateTTS(text);
-		}
-		if (this.state.inputMode === 'hot') {
-			this.bumblebee.simulateHotword(text);
-		}
+    this.bumblebee.simulateSTT(text);
 	}
 	
 	showSettings() {
