@@ -1,14 +1,18 @@
 {
-  "name": "com.jaxcore.bumblebee",
-  "description": "Bumblebee - JavaScript voice application server",
-  "author": "Jaxcore Software Inc.",
+  "name": "pia-electron-client",
+  "description": "Pia voice assistant frontend for audio IO and GUI",
+  "author": "Ben Bucksch",
   "version": "0.0.1",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pia-im/pia-electron-client"
+  },
   "private": false,
   "main": "public/electron.js",
   "dependencies": {
     "@material-ui/core": "^4.8.0",
     "@material-ui/icons": "^4.5.1",
-    "bumblebee-deepspeech": "0.0.1",
     "bumblebee-hotword": "0.0.9",
     "electron-is-dev": "^1.1.0",
     "jaxcore": "0.0.3",
@@ -27,24 +31,24 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "bumblebee-assistant": "node ./public/bumblebee-assistant/start",
+    "assistant": "node ./public/bumblebee-assistant/start",
     "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron --inspect=5858 .\"",
     "rebuild": "npm rebuild --runtime=electron --target=9.0.2 --disturl=https://atom.io/download/atom-shell --abi=75",
     "pack": "yarn run build && electron-builder --dir",
     "dist": "yarn run build && electron-builder"
   },
   "postinstall": "electron-builder install-app-deps",
-  "homepage": "./",
+  "homepage": "https://pia.im",
   "build": {
-    "appId": "com.jaxcore.bumblebee",
-    "productName": "Jaxcore Bumblebee",
+    "appId": "pia-electron-client",
+    "productName": "Pia frontend",
     "files": [
       "build/**/*",
       "node_modules/**/*",
       "package.json"
     ],
     "buildDependenciesFromSource": true,
-    "artifactName": "Jaxcore-Bumblebee-${version}-${os}.${ext}",
+    "artifactName": "Pia-frontend-${version}-${os}.${ext}",
     "dmg": {
       "icon": "./assets/icon.icns",
       "title": "${productName}"
@@ -94,7 +98,7 @@
         }
       ],
       "icon": "./assets/icon-1024x1024",
-      "synopsis": "Bumblebee - JavaScript voice application server",
+      "synopsis": "Pia voice assistant frontend for audio IO and GUI",
       "category": "Utility"
     }
   },
@@ -103,7 +107,7 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
+      ">2%",
       "not dead",
       "not op_mini all"
     ],
@@ -119,9 +123,5 @@
     "electron-builder": "^22.7.0",
     "electron-rebuild": "^1.11.0",
     "wait-on": "^3.3.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jaxcore/bumblebee-electron-app"
   }
 }
