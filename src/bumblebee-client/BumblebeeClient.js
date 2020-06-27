@@ -11,12 +11,7 @@ const ipcRenderer = window.ipcRenderer;
 class BumblebeeClient extends EventEmitter {
 	constructor(app) {
 		super();
-		
 		window.bumblebee = this;
-		
-		this.app = app;
-		this.apps = {};
-		this.assistants = {};
 		
 		this.hotword = new Hotword();
 		this.hotword.bufferSize = 512;
@@ -127,8 +122,6 @@ class BumblebeeClient extends EventEmitter {
 			this.app.setState({
 				recording: true
 			}, () => {
-				// debugger;
-				// this.microphone.start();
 				this.hotword.start();
 				this.playSound('on');
 			});
@@ -149,10 +142,6 @@ class BumblebeeClient extends EventEmitter {
 	}
 	
 	stopRecording() {
-		if (!this.app.state.config.deepspeechInstalled) {
-			return;
-		}
-		
 		if (this.app.state.recording) {
 			if (this.app.state.useSystemMic) {
 				ipcRenderer.send('recording-stop');
